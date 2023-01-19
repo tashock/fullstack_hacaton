@@ -1,12 +1,12 @@
-from rest_framework.routers import SimpleRouter
+from django.views.decorators.cache import cache_page
+from rest_framework.routers import DefaultRouter
 from .views import ProductAPIView, CategoryAPIView, CommentAPIVIew
 
 
-router = SimpleRouter()
+router = DefaultRouter()
 router.register('category', CategoryAPIView)
 router.register('comment', CommentAPIVIew)
 router.register('', ProductAPIView)
-print(router.urls)
 
 urlpatterns = [
 

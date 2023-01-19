@@ -1,6 +1,9 @@
+from django.utils.decorators import method_decorator
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from django.views.decorators.cache import cache_page
 
 from applications.products.serializers import ProductSerializer, CategorySerializer, RatingSerializer, CommentSerializer
 from applications.products.models import Product, Category, Like, Rating, Comment
@@ -10,7 +13,14 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import status
 
 
+class ProductPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
 class ProductAPIView(ModelViewSet):
+    pagination_class = ProductPagination
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminUser]
@@ -18,6 +28,8 @@ class ProductAPIView(ModelViewSet):
     filterset_fields = ['category']
     search_fields = ['title']
     ordering_fields = ['price']
+
+
 
     def get_permissions(self):
         if self.action == 'POST':
@@ -51,6 +63,10 @@ class ProductAPIView(ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset
+
+    @method_decorator(cache_page(15))
+    def list(self, request, *args, **kwargs):
+        return super().list(request)
 
 
 class CategoryAPIView(ModelViewSet):
