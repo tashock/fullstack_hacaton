@@ -7,7 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from applications.account.serializers import RegisterSerializer, LoginSerializer, ChangePasswordSerializer, \
     ForgotPasswordSerializer, ForgotPasswordCompleteSerializer
 
@@ -43,6 +45,14 @@ class LoginApiView(ObtainAuthToken):
         return Response({
             'message': 'success'
         })
+
+
+class LogoutApiView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        logout(request)
+        return Response({'message': 'success'})
 
 
 class ChangePasswordApiView(APIView):
