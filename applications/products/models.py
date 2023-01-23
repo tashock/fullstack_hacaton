@@ -65,3 +65,15 @@ class Comment(models.Model):
     def __str__(self) -> str:
         return f'{self.owner.username} {self.product.title}'
 
+
+class CommentLike(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_likes')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comment_likes')
+    like = models.BooleanField(default=False)
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    products = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorites')
+    is_favorite = models.BooleanField(default=False)
+

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from applications.products.models import Category, Product, Like, Rating, Comment
+from applications.products.models import Category, Product, Like, Rating, Comment, Favorite, CommentLike
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -19,3 +19,5 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Like)
 admin.site.register(Rating)
 admin.site.register(Comment)
+admin.site.register(Favorite)
+admin.site.register(CommentLike)

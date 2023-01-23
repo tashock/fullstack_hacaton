@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from django.views.decorators.cache import cache_page
 
 from applications.products.serializers import ProductSerializer, CategorySerializer, RatingSerializer, CommentSerializer
-from applications.products.models import Product, Category, Like, Rating, Comment
+from applications.products.models import Product, Category, Like, Rating, Comment, Favorite, CommentLike
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -29,8 +29,6 @@ class ProductAPIView(ModelViewSet):
     search_fields = ['title']
     ordering_fields = ['price']
 
-
-
     def get_permissions(self):
         if self.action == 'POST':
             return [IsAuthenticatedOrReadOnly]
@@ -41,11 +39,20 @@ class ProductAPIView(ModelViewSet):
     def likes(self, request, pk, *args, **kwargs):  # post/id/like/
         like_obj, _ = Like.objects.get_or_create(post_id=pk, owner=request.user)
         like_obj.like = not like_obj.like
-        print(like_obj)
         like_obj.save()
         status = 'liked'
         if not like_obj.like:
             status = 'unlike'
+        return Response({'status': status})
+
+    @action(methods=['POST'], detail=True)
+    def favorites(self, request, pk, *args, **kwargs):
+        fav_obj, is_created = Favorite.objects.get_or_create(product=pk, user=request.user)
+        fav_obj.is_favorite = not fav_obj.is_favorite
+        fav_obj.save()
+        status = 'in_favorites'
+        if not fav_obj.is_favorite:
+            status = 'not_in_favorites'
         return Response({'status': status})
 
     @action(detail=True, methods=['POST'])
@@ -80,6 +87,16 @@ class CommentAPIVIew(ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    @action(methods=['POST'], detail=True)
+    def likes(self, request, pk, *args, **kwargs):  # post/id/like/
+        like_obj, _ = CommentLike.objects.get_or_create(post_id=pk, owner=request.user)
+        like_obj.like = not like_obj.like
+        like_obj.save()
+        status = 'liked'
+        if not like_obj.like:
+            status = 'unlike'
+        return Response({'status': status})
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -87,3 +104,7 @@ class CommentAPIVIew(ModelViewSet):
         queryset = super().get_queryset()
         queryset = queryset.filter(owner=self.request.user)
         return queryset
+
+
+
+
