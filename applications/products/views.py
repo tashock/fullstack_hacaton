@@ -14,7 +14,7 @@ from rest_framework import status
 
 
 class ProductPagination(PageNumberPagination):
-    page_size = 10
+    page_size = 12
     page_size_query_param = 'page_size'
     max_page_size = 1000
 
@@ -37,7 +37,7 @@ class ProductAPIView(ModelViewSet):
 
     @action(methods=['POST'], detail=True)
     def likes(self, request, pk, *args, **kwargs):  # post/id/like/
-        like_obj, _ = Like.objects.get_or_create(post_id=pk, owner=request.user)
+        like_obj, _ = Like.objects.get_or_create(product_id=pk, owner=request.user)
         like_obj.like = not like_obj.like
         like_obj.save()
         status = 'liked'
@@ -47,7 +47,7 @@ class ProductAPIView(ModelViewSet):
 
     @action(methods=['POST'], detail=True)
     def favorites(self, request, pk, *args, **kwargs):
-        fav_obj, is_created = Favorite.objects.get_or_create(product=pk, user=request.user)
+        fav_obj, is_created = Favorite.objects.get_or_create(product_id=pk, user=request.user)
         fav_obj.is_favorite = not fav_obj.is_favorite
         fav_obj.save()
         status = 'in_favorites'
@@ -59,7 +59,7 @@ class ProductAPIView(ModelViewSet):
     def ratings(self, request, pk, *args, **kwargs):
         serializer = RatingSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        rating_obj, _ = Rating.objects.get_or_create(post_id=pk, owner=request.user)
+        rating_obj, _ = Rating.objects.get_or_create(product_id=pk, owner=request.user)
         rating_obj.rating = request.data['rating']
         rating_obj.save()
         return Response(request.data, status=status.HTTP_201_CREATED)
