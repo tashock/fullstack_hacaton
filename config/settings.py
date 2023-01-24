@@ -13,8 +13,8 @@ import os.path
 from datetime import timedelta
 from pathlib import Path
 
-import dj_database_url
 from decouple import config
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,11 +32,11 @@ DEBUG = config('DEBUG', default=True)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
-DATABASE_URL= config('DATABASE_URL')
+# DATABASE_URL= config('DATABASE_URL')
 
-# DATABASES = {
-#     'default': dj_database_url.config(default=config('DATABASE_URL'))
-# }
+DATABASES = {
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
+}
 
 
 # Application definition
