@@ -8,5 +8,9 @@ dj-config-url
 django-filter
 drf-yasg
 django-cors-headers
+<<<<<<< HEAD
 phonenumbers
 celery[redis]
+=======
+celery
+>>>>>>> 2e694d188e4558f0c7eea30242844e424ef14f4f
