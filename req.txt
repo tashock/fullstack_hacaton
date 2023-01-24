@@ -9,4 +9,3 @@ django-filter
 drf-yasg
 django-cors-headers
 phonenumbers
-celery[redis]
