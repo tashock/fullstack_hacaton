@@ -58,12 +58,8 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'corsheaders',
-<<<<<<< HEAD
+
     'phonenumber_field',
-=======
-
-
->>>>>>> 2e694d188e4558f0c7eea30242844e424ef14f4f
 ]
 
 MIDDLEWARE = [
@@ -171,7 +167,6 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:8000'
 ]
 
-<<<<<<< HEAD
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -227,12 +222,4 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 BROKER_URL = 'redis://127.0.0.1:6379/0'
 BROKER_TRANSPORT = 'redis'
 
-=======
 
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Bishkek'
->>>>>>> 2e694d188e4558f0c7eea30242844e424ef14f4f
